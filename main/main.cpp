@@ -13,48 +13,35 @@
 #include <sstream>
 #include <string>
 
+// Local library
+#include "FileVault.hpp"
+#include "Utils.hpp"
+
 namespace fs = std::filesystem;
 using json = nlohmann::json;
-
-template <typename T>
-T getUserInput(std::string msgAskingForInput) {
-	std::cout << msgAskingForInput << ": ";
-	T input;
-	std::cin >> input;
-	return input;
-}
 
 int main() {
 	std::cout << "Chirp Explorer - Search Twitter\n";
 
-	std::string bearerToken;
 	auto pathToBearerFile = fs::temp_directory_path();
 	pathToBearerFile /= "FindTheChirpsCred.txt";
-
-	if (fs::exists(pathToBearerFile)) {
-		std::ifstream ifs(pathToBearerFile);
-		if (ifs.is_open()) {
-			std::getline(ifs, bearerToken);
-		}
-		else {
-			std::cerr << "Unable to read bearer token from file.\n";
-		}
-	}
+	chirpexplorer::FileVault vault(pathToBearerFile);
+	
+	std::string bearerToken;
+	auto storedToken = vault.load();
+	if (storedToken.second) {
+		bearerToken = storedToken.first;
+	} 
 	else {
-		bearerToken = getUserInput<std::string>("Enter the bearer token for your Twitter app to continue");
-
-		std::ofstream ofs(pathToBearerFile);
-		if (ofs.is_open()) {
-			ofs << bearerToken;
-		}
-		else {
-			std::cerr << "Unable to write bearer token to file.\n";
+		bearerToken = chirpexplorer::getUserInput<std::string>("Enter the bearer token for your Twitter app to continue");
+		if (!(vault.store(bearerToken))) {
+			std::cerr << "Unable to persist bearer token for usage on subsequent runs.\n";
 		}
 	}
 
-	auto const query = getUserInput<std::string>("Enter search query");
+	auto const query = chirpexplorer::getUserInput<std::string>("Enter search query");
 	auto const maxResults = std::clamp(
-		getUserInput<int>("How many search results do you want [10-100]"),
+		chirpexplorer::getUserInput<int>("How many search results do you want [10-100]"),
 		10, 100);
 
 	httplib::Client cli("https://api.twitter.com");
