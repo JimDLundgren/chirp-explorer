@@ -4,10 +4,12 @@ Small example program using the Twitter REST API to serach for tweets containing
 
 # Requirements
 
-1. yhirose/cpp-httplib (https://github.com/yhirose/cpp-httplib) for http requests.
+1. To run the program you need a Bearer Token from a registered Twitter developer App,
+supporting Twitter API v2 (https://developer.twitter.com/en/docs/apps/overview).
+2. yhirose/cpp-httplib (https://github.com/yhirose/cpp-httplib) for http requests.
 Note: it requires OpenSSL.
-2. nlohmann/json (https://github.com/nlohmann/json) for parsing json.
-3. The tests require gtest/gmock.
+3. nlohmann/json (https://github.com/nlohmann/json) for parsing json.
+4. The tests require gtest/gmock.
 
 # Install on Windows:
 
