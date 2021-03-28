@@ -1,22 +1,26 @@
 # chirp-explorer
 
-Small example profram using the Twitter REST API to serach for tweets containing a given query.
+Small example program using the Twitter REST API to serach for tweets containing a given query.
 
 # Requirements
 
-yhirose/cpp-httplib (https://github.com/yhirose/cpp-httplib) for http requests.
+1. yhirose/cpp-httplib (https://github.com/yhirose/cpp-httplib) for http requests.
 Note: it requires OpenSSL.
-nlohmann/json (https://github.com/nlohmann/json) for parsing json.
+2. nlohmann/json (https://github.com/nlohmann/json) for parsing json.
+3. The tests require gtest/gmock.
 
 # Install on Windows:
 
-Both cpp-httplib and json are available as single-header libraries, so just download and link in VS.
-However, to use HTTPS in cpp-httplib, we need OpenSSL.
-Download the supported version at https://www.openssl.org/source/. To install:
-Download ActiveState perl (5.28 is latest release at time of this writing). NoteL need to add Text-Template in the build.
-Download and install NASM.
-Choose the VC-Win32 option when installing OpenSSL.
-Note: nmake test will stall with ActiveState perl (supposibly with Strawberry it works)
-Linking in VS: Additional Include dirs, Additional Library Dirs, and Library Input (names of libraries)
-In VS also need to set debugging Environment to PATH=%PATH%;$(OpenSSLInstallDir)\bin
+- Both cpp-httplib and json are available as single-header libraries, so simply download and link in VS.
+- To use HTTPS in cpp-httplib, we need OpenSSL. Download the supported version at https://www.openssl.org/source/.
+To install, follow the instructions in the OpenSSL source. Some notes on the installation:
+    - Download ActiveState perl (5.28 is latest release at time of this writing).
+    Note: need to add Text-Template in the build.
+    - Download and install NASM.
+    - When installing OpenSSL, choose the VC-Win32 installation option.
+    Note: "nmake test" will stall due to ActiveState perl (supposibly with Strawberry it works).
+    - Linking in VS:
+        - Add the relevant paths in Additional Include dirs and Additional Library Dirs.
+        - Add the names of the libraries in the Library Input.
+        - Set the debugging Environment to PATH=%PATH%;$(OpenSSLInstallDir)\bin.
 
