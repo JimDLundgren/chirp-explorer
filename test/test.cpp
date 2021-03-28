@@ -1,4 +1,4 @@
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
 #include <filesystem>
 #include <fstream>
@@ -12,8 +12,7 @@ namespace fs = std::filesystem;
 namespace {
 
 int getRandomNumber() {
-	static std::random_device dev;
-	static std::mt19937 rng(dev());
+	static std::mt19937 rng(std::random_device{}());
 	static std::uniform_int_distribution<std::mt19937::result_type> dist(
 		0, std::numeric_limits<int>::max());
 
@@ -38,7 +37,13 @@ public:
 	}
 
 	void TearDown() override {
-		fs::remove(_tempFile);
+		if (HasFailure()) {
+			std::cerr << "Preserving file vault test file: " 
+				<< _tempFile.string() << " (if it exists)\n";
+		}
+		else {
+			fs::remove(_tempFile);
+		}
 	}
 };
 
